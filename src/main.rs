@@ -35,12 +35,19 @@ fn value_to_string(value: &Option<u8>) -> String {
 
 fn line_to_string(line: &Vec<Option<u8>>) -> String {
     let vec: Vec<String> = line.iter().map(|v| value_to_string(v)).collect();
-    ["│ ", &vec.join(" │ "), " │"].concat()
+    [
+        "│ ",
+        &vec.chunks(3)
+            .map(|chunk| chunk.join(" │ "))
+            .collect::<Vec<_>>()
+            .join(" ║ "),
+        " │",
+    ].concat()
 }
 
-const SEP_NORTH:  &'static str =   "┌───┬───┬───┬───┬───┬───┬───┬───┬───┐\n";
-const SEP_MIDDLE: &'static str = "\n├───┼───┼───┼───┼───┼───┼───┼───┼───┤\n";
-const SEP_SOUTH:  &'static str = "\n└───┴───┴───┴───┴───┴───┴───┴───┴───┘";
+const SEP_NORTH:  &'static str =   "┌───┬───┬───╥───┬───┬───╥───┬───┬───┐\n";
+const SEP_MIDDLE: &'static str = "\n├───┼───┼───╫───┼───┼───╫───┼───┼───┤\n";
+const SEP_SOUTH:  &'static str = "\n└───┴───┴───╨───┴───┴───╨───┴───┴───┘";
 
 fn grid_to_string(grid: &Grid) -> String {
     let lines: Vec<String> = grid.data.iter().map(|line| line_to_string(&line)).collect();
