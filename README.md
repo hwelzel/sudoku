@@ -1,4 +1,5 @@
-= Sudoku
+Sudoku
+======
 
 A simple project used to get acquainted with rust on the theme of the Sudoku.
 
