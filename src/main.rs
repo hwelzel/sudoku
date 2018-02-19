@@ -45,13 +45,22 @@ fn line_to_string(line: &Vec<Option<u8>>) -> String {
     ].concat()
 }
 
-const SEP_NORTH:  &'static str =   "┌───┬───┬───╥───┬───┬───╥───┬───┬───┐\n";
-const SEP_MIDDLE: &'static str = "\n├───┼───┼───╫───┼───┼───╫───┼───┼───┤\n";
-const SEP_SOUTH:  &'static str = "\n└───┴───┴───╨───┴───┴───╨───┴───┴───┘";
+const SEP_NORTH: &'static str =   "┌───┬───┬───╥───┬───┬───╥───┬───┬───┐\n";
+const SEP_MINOR: &'static str = "\n├───┼───┼───╫───┼───┼───╫───┼───┼───┤\n";
+const SEP_MAJOR: &'static str = "\n╞═══╪═══╪═══╬═══╪═══╪═══╬═══╪═══╪═══╡\n";
+const SEP_SOUTH: &'static str = "\n└───┴───┴───╨───┴───┴───╨───┴───┴───┘";
 
 fn grid_to_string(grid: &Grid) -> String {
     let lines: Vec<String> = grid.data.iter().map(|line| line_to_string(&line)).collect();
-    [SEP_NORTH, &lines.join(SEP_MIDDLE), SEP_SOUTH].concat()
+    [
+        SEP_NORTH,
+        &lines
+            .chunks(3)
+            .map(|chunk| chunk.join(SEP_MINOR))
+            .collect::<Vec<_>>()
+            .join(SEP_MAJOR),
+        SEP_SOUTH,
+    ].concat()
 }
 
 fn print_grid(grid: &Grid) {
