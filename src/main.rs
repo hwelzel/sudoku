@@ -7,13 +7,18 @@ struct Grid {
 
 fn read_value(c: char) -> Option<u8> {
     if c == '_' || c == '0' {
-        None
-    } else {
-        Some(c.to_digit(10)? as u8)
+        return None;
     }
+    if !c.is_ascii_digit() {
+        panic!("invalid character '{}'", c);
+    }
+    Some(c.to_digit(10)? as u8)
 }
 
 fn read_line(line: &str) -> Vec<Option<u8>> {
+    if line.len() != 9 {
+        panic!("invalid line '{}'", line);
+    }
     line.chars().map(|c| read_value(c)).collect()
 }
 
@@ -23,8 +28,13 @@ fn read_grid(filename: &str) -> std::io::Result<Grid> {
     file.read_to_string(&mut content)?;
     content.pop();
 
+    let lines: Vec<&str> = content.split("\n").collect();
+    if lines.len() != 9 {
+        panic!("invalid number of lines in input file");
+    }
+
     Ok(Grid {
-        data: content.split("\n").map(|line| read_line(line)).collect(),
+        data: lines.iter().map(|line| read_line(line)).collect(),
     })
 }
 
