@@ -5,6 +5,18 @@ struct Grid {
     data: Vec<Vec<Option<u8>>>,
 }
 
+fn read_value(c: char) -> Option<u8> {
+    if c == '_' {
+        None
+    } else {
+        Some(c.to_digit(10)? as u8)
+    }
+}
+
+fn read_line(line: &str) -> Vec<Option<u8>> {
+    line.chars().map(|c| read_value(c)).collect()
+}
+
 fn read_grid(filename: &str) -> std::io::Result<Grid> {
     let mut file = File::open(filename)?;
     let mut content = String::new();
@@ -12,20 +24,7 @@ fn read_grid(filename: &str) -> std::io::Result<Grid> {
     content.pop();
 
     Ok(Grid {
-        data: content
-            .split("\n")
-            .map(|line| {
-                line.chars()
-                    .map(|c| {
-                        if c == '_' {
-                            None
-                        } else {
-                            Some(c.to_digit(10)? as u8)
-                        }
-                    })
-                    .collect()
-            })
-            .collect(),
+        data: content.split("\n").map(|line| read_line(line)).collect(),
     })
 }
 
