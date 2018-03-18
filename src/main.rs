@@ -6,7 +6,7 @@ struct Grid {
 }
 
 fn read_value(c: char) -> Option<u8> {
-    if c == '_' {
+    if c == '_' || c == '0' {
         None
     } else {
         Some(c.to_digit(10)? as u8)
